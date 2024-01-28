@@ -31,6 +31,7 @@ function animatePressed(currentColor) {
 function checkAnswer(currentLevel) {
   if (gamePattern[currentLevel] == userClickedPattern[currentLevel]) {
     console.log("success");
+    playSound(userClickedPattern[currentLevel]);
   } else {
     var fail = new Audio("./sounds/wrong.mp3");
     fail.play();
@@ -38,7 +39,8 @@ function checkAnswer(currentLevel) {
     setTimeout(function () {
       $("body").removeClass("game-over");
     }, 500);
-    gamePattern, (userClickedPattern = []);
+    gamePattern = [];
+    userClickedPattern = [];
     level = 0;
     $("h1").text("Press A Key to Start");
   }
@@ -55,12 +57,14 @@ $(".btn").click(function () {
   var userChosenColor = $(this).attr("id");
   userClickedPattern.push(userChosenColor);
   var foo = userClickedPattern.length - 1;
-  playSound(userChosenColor);
+  //playSound(userChosenColor);
   animatePressed("#" + userChosenColor);
   checkAnswer(foo);
 });
 
 $("body").keydown(function () {
-  nextSequence();
-  $("h1").text("Level " + level);
+  if ($("h1").text() == "Press A Key to Start") {
+    nextSequence();
+    $("h1").text("Level " + level);
+  }
 });
